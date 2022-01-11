@@ -35,7 +35,7 @@ jobs:
     - name: Upload to Azure blob storage
       uses: azure/CLI@v1
       with:
-        azcliversion: 2.32.00
+        azcliversion: 2.32.0
         inlineScript: |
           echo "Retrieving the primary key of the [${{ env.STORAGE_ACCOUNT_NAME }}] storage account..."
           storageAccountKey=$(az storage account keys list --resource-group $resourceGroupName --account-name ${{ env.STORAGE_ACCOUNT_NAME }} --query [0].value -o tsv)
