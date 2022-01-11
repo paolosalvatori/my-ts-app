@@ -37,10 +37,28 @@ jobs:
       with:
         azcliversion: 2.32.00
         inlineScript: |
-            az storage blob upload-batch \
+          echo "Retrieving the primary key of the [${{ env.STORAGE_ACCOUNT_NAME }}] storage account..."
+          storageAccountKey=$(az storage account keys list --resource-group $resourceGroupName --account-name ${{ env.STORAGE_ACCOUNT_NAME }} --query [0].value -o tsv)
+
+          if [[ -n $storageAccountKey ]]; then
+            echo "Primary key of the [${{ env.STORAGE_ACCOUNT_NAME }}] storage account successfully retrieved"
+          else
+            echo "Failed to retrieve the primary key of the [${{ env.STORAGE_ACCOUNT_NAME }}] storage account"
+            exit
+          fi
+
+          echo "Uploading files to [${{ env.STORAGE_ACCOUNT_NAME }}] storage account..."
+          az storage blob upload-batch \
               --account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
               --destination '$web' \
               --source ./production-files
+          
+          if [[ $? == 0 ]]; then
+            echo "Files successfully uploaded to the [$storageAccountName] storage account"
+          else
+            echo "Failed to upload files to the [$storageAccountName] storage account"
+            exit
+          fi
     
     - name: Azure logout
       run: |
