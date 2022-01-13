@@ -36,7 +36,7 @@ fi
 
 # Create storage account
 echo "Checking if [$storageAccountName] storage account actually exists in the [$subscriptionName] subscription..."
-az storage account show --name $storageAccountName &>/dev/null
+az storage account show --name $storageAccountName --resource-group $resourceGroupName &>/dev/null
 
 if [[ $? != 0 ]]; then
   echo "No [$storageAccountName] storage account actually exists in the [$subscriptionName] subscription"
@@ -117,3 +117,14 @@ if [[ -z $displayName ]]; then
 else
   echo "[$servicePrincipalName] service principal already exists in the [$tenantId] tenant"
 fi
+
+# Print the URL of the static website
+staticWebsiteUrl=$(
+  az storage account show \
+  --name $storageAccountName \
+  --resource-group $resourceGroupName \
+  --query "primaryEndpoints.web" \
+  --output tsv
+)
+
+echo "[$staticWebsiteUrl] is the URL of the static website in the [$storageAccountName] storage account"
