@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# For more information, see https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-static-website
+
 #Variables
 resourceGroupName="StorageAccountsRG"
 storageAccountName="baboweb"
